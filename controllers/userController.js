@@ -11,10 +11,8 @@ exports.getUsers = async (req, res) =>{
 
 exports.getUser = async (req,res) => {
     try{
-       await User.findById(req.params.id, (err, oneUser) => {
-            if (err) return res.sendStatus(400);
-            res.json(oneUser);
-        })
+       const oneUser = await User.findById(req.params.id)
+       res.json(oneUser);
     }
     catch (err){
         res.status(500).json({message: err.message});
@@ -30,7 +28,7 @@ exports.postUser = async (req,res) => {
             age: req.body.age
         })
         await user.save();
-        res.send(user);
+        res.json(user);
     }
     catch(err){
         res.status(400).json({message: err.message});
@@ -41,10 +39,8 @@ exports.postUser = async (req,res) => {
 exports.deleteUser = async (req,res) => {
     try{
         const id = req.params.id;
-        await User.findByIdAndDelete(id, (err, oneUser)=>{
-            if (err) return res.sendStatus(400);
-            res.send(oneUser);
-        }) 
+       const userById = await User.findByIdAndDelete(id);
+       res.json(userById); 
     }
     catch(err){
         res.status(400).json({message: err.message});
@@ -56,12 +52,8 @@ exports.updateUser = async (req,res) => {
     try{
         if(!req.body) return res.sendStatus(400);
         const {id, ...data} = req.body
-     await User.findByIdAndUpdate(id, data, {new:true}, (err,doc)=> {
-        if(err) console.log(err);
-        res.send(doc);
-     });
-   
-    
+        const userById = await User.findByIdAndUpdate(id, data, {new:true});
+        res.json(userById);
     }
     catch (err){
         res.status(400).json({message: err.message});
