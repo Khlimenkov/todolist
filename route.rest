@@ -1,0 +1,30 @@
+GET http://localhost:3000/api/users/60acb322712cdf17745bcf49
+   
+
+###
+
+POST http://localhost:3999/api/users HTTP/1.1
+content-Type: application/json
+
+{ 
+"name":"Alexasx",
+"surname":"Doe",
+"age":25
+}
+
+###
+
+PUT  http://localhost:3999/api/users HTTP/1.1
+content-Type: application/json
+
+{
+"id":"60acb322712cdf17745bcf49",
+"name":"123123213",
+"age":3213123123
+}
+
+###
+
+DELETE   http://localhost:3999/api/users/60acbb6f7b7d1b1f72c151d7 HTTP/1.1
+content-Type: application/json
+
