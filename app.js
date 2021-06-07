@@ -1,12 +1,26 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const passport = require('passport');
+const cookieParser = require('cookie-parser');
+require('dotenv').config();
+const taskRouters = require('./routes/taskRouter');
 
 const jsonParser = express.json();
-const userRouters = require('./routes/userRouter');
-require('dotenv').config();
 
 const app = express();
-app.use('/api/users', jsonParser, userRouters);
+app.use(cookieParser());
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(jsonParser);
+
+const initPassport = require('./passport/init');
+
+initPassport(passport);
+const userRouters = require('./routes/userRouter')(passport);
+
+app.use('/', userRouters);
+app.use('/api/tasks', taskRouters);
 
 const port = process.env.PORT || 3000;
 const startServer = () => {
