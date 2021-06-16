@@ -1,21 +1,21 @@
 const LocalStrategy = require('passport-local').Strategy;
-const User = require('../models/user');
+const UserService = require('../services/UserService');
 
 module.exports = (passport) => {
   passport.use('login', new LocalStrategy(
-    (username, password, done) => {
-      User.findOne({ username }, (err, user) => {
-        if (err) { return done(err); }
-        if (!user) {
-          return done(null, false, { message: 'Incorrect username' });
-        }
+    async (username, password, done) => {
+      try {
+        const user = await UserService.getUserByUsername(username);
+        const checkPassword = UserService.validPassword(user.password, password);
 
-        if (user.validPassword(password)) {
-          return done(null, user);
-        }
-        console.log('dasdasd');
-        return done(null, false, { message: 'Incorrect password' });
-      });
+        if (user === null) throw new Error('User not registered');
+
+        if (!checkPassword) throw new Error('Incorrect password');
+
+        return done(null, user);
+      } catch (e) {
+        return done(e, false, { message: e.message });
+      }
     },
   ));
 };

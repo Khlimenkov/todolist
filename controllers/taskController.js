@@ -29,13 +29,9 @@ exports.postTask = async (req, res) => {
       isCompleted: false,
       user: req.cookies.user,
     });
-    await newTask.save().then(() => {
-      Task
-        .populate(newTask, { path: 'user' })
-        .then((task) => {
-          res.json(task);
-        });
-    });
+    await newTask.populate('user').execPopulate();
+    const task = await newTask.save();
+    res.status(200).send(task);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

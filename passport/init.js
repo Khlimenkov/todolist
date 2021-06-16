@@ -4,7 +4,7 @@ const signup = require('./signup');
 
 module.exports = (passport) => {
   passport.serializeUser((user, done) => {
-    console.log('serializing user: '); console.log(user);
+    console.log('serializing user:', user);
     done(null, user.id);
   });
 

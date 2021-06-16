@@ -7,7 +7,6 @@ module.exports = (passport) => {
     res.cookie('user', req.user.id);
     res.send('cookie was added');
   });
-  // eslint-disable-next-line no-unused-vars
   userRouter.post('/signup', passport.authenticate('signup'), (req, res) => {
     res.cookie('user', req.user.id);
     res.send('cookie was added');
