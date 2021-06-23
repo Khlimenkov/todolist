@@ -2,7 +2,7 @@
   "name": "proj",
   "version": "1.0.0",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
@@ -14,11 +14,16 @@
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.7",
-    "mongoose": "^5.12.10",
-    "nodemon": "^2.0.7"
+    "mongoose": "^5.12.12",
+    "nodemon": "^2.0.7",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",

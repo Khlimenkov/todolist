@@ -1,22 +1,32 @@
 const mongoose = require('mongoose');
+const crypto = require('crypto');
+require('dotenv').config();
 
-const Shema = mongoose.Schema;
+const { Schema } = mongoose;
 
-const userShema = new Shema(
+const userSchema = new Schema(
   {
-    name: {
+    username: {
       type: String,
       required: true,
     },
-    surname: {
+    password: {
       type: String,
       required: true,
     },
-    age: {
-      type: Number,
-      required: true,
-    },
+
   },
   { versionKey: false },
 );
-module.exports = mongoose.model('User', userShema);
+
+userSchema.pre(
+  'save',
+  async function (next) {
+    const hash = crypto.pbkdf2Sync(this.password, process.env.SALT,
+      1000, 64, 'sha512').toString('hex');
+    this.password = hash;
+    next();
+  },
+);
+
+module.exports = mongoose.model('User', userSchema);
