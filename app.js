@@ -6,21 +6,23 @@ require('dotenv').config();
 const taskRouters = require('./routes/taskRouter');
 
 const jsonParser = express.json();
+require('./config/passport')(passport);
 
 const app = express();
 app.use(cookieParser());
 
 app.use(passport.initialize());
-app.use(passport.session());
 app.use(jsonParser);
+app.use(express.urlencoded({ extended: true }));
 
-const initPassport = require('./passport/init');
-
-initPassport(passport);
-const userRouters = require('./routes/userRouter')(passport);
+const userRouters = require('./routes/userRouter');
 
 app.use('/', userRouters);
-app.use('/api/tasks', taskRouters);
+app.use(
+  '/api/tasks',
+  passport.authenticate('jwt', { session: false }),
+  taskRouters,
+);
 
 const port = process.env.PORT || 3000;
 const startServer = () => {
